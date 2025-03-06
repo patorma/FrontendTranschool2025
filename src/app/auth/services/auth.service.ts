@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { User } from '../../user/interface/user';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { roles, User } from '../../user/interface/user';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
@@ -17,15 +17,22 @@ export class AuthService {
         name: '',
         last_name: '',
         comuna: '',
-        role: 'apoderado', // Asigna un valor válido para el tipo `roles`
+        role: 'apoderado' ,// Asigna un valor válido para el tipo `roles`
         telefono: '',
         email: '',
         password: ''
   };
 
 
-  constructor(private http: HttpClient,private router: Router) { }
-
+  constructor(private http: HttpClient,private router: Router) {
+    const storedRole = localStorage.getItem('role');
+    if (storedRole && this.isValidRole(storedRole)) {
+      this.user.role = storedRole;
+  }
+   }
+   isValidRole(role: string): role is roles {
+    return role === 'admin' || role === 'apoderado' || role === 'transportista';
+}
  registerUser(user: User): Observable<User>{
     return this.http
              .post(`${this.URL}/register`,user)
@@ -89,7 +96,17 @@ export class AuthService {
   }
 
   getUser(): Observable<any> {
+
     return this.http.get(`${this.URL}/me`).pipe(
+     map((response:any)=>{
+      console.log("Respuesta del backend:", response);
+      const {data} = response
+      this.user = data; // Asigna toda la respuesta a this.user
+      localStorage.setItem('role',this.user.role);
+      console.log("Rol del usuario después de la respuesta:", this.user.role);
+      return response;
+     })
+      ,
       catchError((e) => {
         if(e.status != 401 && e.error.mensa){
             /*capturamos el error y redirigimos a gastos*/
@@ -120,11 +137,9 @@ export class AuthService {
   // return payload != null && payload.email && payload.email.length > 0;
 }
    hasRole(role: string): boolean{
-    if(this.user.role.includes(role)){
-      return true
-    }
-    return false
+    return this.user.role === role;
    }
+
    public get usuario(): User{
     if (this.user.id !== 0) {
       return this.user;
@@ -143,6 +158,36 @@ export class AuthService {
       password: ''
     };
 
+  }
+
+  getUsers():Observable<any>{
+    return this.http.get(`${this.URL}/users`).pipe(
+      catchError((e) => {
+        if(e.status != 401 && e.error.mensa){
+            /*capturamos el error y redirigimos a gastos*/
+         this.router.navigate(['login'])
+          console.error(e.error.error);
+        }
+        return throwError(()=>e);
+      })
+    )
+  }
+
+  public removeToken(): void{
+    localStorage.removeItem('token');
+  }
+
+  deleteUser(id: number): Observable<User>{
+    return this.http
+                .delete<User>(`${this.URL}/user/${id}`)
+                .pipe(
+                  catchError((e)=>{
+                    if(e.error.mensaje){
+                      console.error(e.error.mensaje);
+                      }
+                    return throwError(()=>e);
+                  })
+                )
   }
   // public get refreshToken(): string{
   //   if(this._refresh_token!= null){

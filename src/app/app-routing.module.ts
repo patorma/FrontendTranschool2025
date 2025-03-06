@@ -15,13 +15,16 @@ const routes: Routes = [
 
 
   {
-    path: 'welcome',
+    path: 'usuarios',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
+  // {
+  //   path:'usuarios'
+  // },
 
   {
     path:'**',
-    redirectTo: '/home'
+    redirectTo: '/usuarios'
   }
 ];
 

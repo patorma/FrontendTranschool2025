@@ -27,13 +27,14 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    const {email,password} = this.usuario
+    const {email,password,role} = this.usuario
     if(email == null || password == null || email === '' || password== ''){
       Swal.fire('Error Login','Username o password vacías!','error');
       return;
     }
     this.authService.login(this.usuario).subscribe({
       next: (res) => {
+        console.log(role)
         this.authService.setToken(res.token);
 
         // Obtener datos del usuario desde API /me

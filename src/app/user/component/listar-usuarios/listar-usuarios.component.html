@@ -1,0 +1,55 @@
+<div class="card border-primary tarjeta mb-3 panel">
+  <div class="card-header">{{ title }}</div>
+    <div class="card-body text-primary">
+      <h4 class="card-title">{{ titulo }}</h4>
+      <div class="my-2 text-left">
+         <button class="btn btn-rounded btn-primary" type="button"        [routerLink]="['/usuarios/formuser']">
+            {{ boton }}
+          </button>
+    </div>
+     <div *ngIf="users?.length === 0" class="alert alert-info">
+           {{ warning }}
+     </div>
+     <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm table-md" *ngIf="users.length > 0">
+          <thead>
+             <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Last Name</th>
+                <th>Comuna</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th *ngIf="authService.hasRole('admin')">
+                    Editar
+                </th>
+                <th *ngIf="authService.hasRole('admin')">
+                    Eliminar
+                </th>
+             </tr>
+          </thead>
+          <tbody>
+             <tr *ngFor="let user of users">
+                <td>{{user.id}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.last_name}}</td>
+                <td>{{user.comuna}}</td>
+                <td>{{user.role}}</td>
+                <td>{{user.email}}</td>
+                <td *ngIf="authService.hasRole('admin')">
+                  <button type="button" name="editar" [routerLink]="['/usuarios/form', user.id]" class="btn btn-primary">
+                    editar
+                  </button>
+                </td>
+                <td *ngIf="authService.hasRole('admin')">
+                  <button type="button" name="eliminar" class="btn btn-danger" (click)="delete(user)">
+                    eliminar
+                  </button>
+                </td>
+             </tr>
+          </tbody>
+        </table>
+     </div>
+
+    </div>
+</div>
