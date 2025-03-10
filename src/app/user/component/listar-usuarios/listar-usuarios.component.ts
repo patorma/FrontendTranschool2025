@@ -8,7 +8,8 @@ import Swal from 'sweetalert2';
   selector: 'app-listar-usuarios',
   standalone: false,
   templateUrl: './listar-usuarios.component.html',
-  styleUrl: './listar-usuarios.component.css'
+  styleUrl: './listar-usuarios.component.css',
+
 })
 export class ListarUsuariosComponent implements OnInit {
    users: User[] = [];
@@ -19,18 +20,37 @@ export class ListarUsuariosComponent implements OnInit {
    boton: string = 'Registrar usuario';
    warning: string = 'No hay registros en la base de datos!';
 
+   currentPage: number = 1;
+   totalPages: number = 1;
+   perPage: number = 5;
+   totalItems: number = 0;
+
    constructor( private activatedRoute: ActivatedRoute,
     public authService: AuthService,
     private router: Router){}
 
    ngOnInit(): void {
-     this.authService.getUsers().subscribe((response)=>{
-      const {data} = response;
-      this.users  =   data as User[]
-      console.log(this.users)
-     })
+    this.loadUsers();
    }
 
+   loadUsers():void{
+    this.authService.getUsers(this.currentPage).subscribe((response)=>{
+      const {data,meta} = response;
+      this.users  =   data as User[];
+      this.currentPage = meta.current_page;
+      this.totalPages = meta.last_page;
+      this.perPage = meta.per_page;
+      this.totalItems = meta.total;
+      console.log(this.totalPages)
+      console.log(this.users);
+      console.log("Informacion meta:", meta);
+    });
+   }
+
+   changePage(page: number): void {
+    this.currentPage = page;
+    this.loadUsers();
+  }
    delete(user: User): void{
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

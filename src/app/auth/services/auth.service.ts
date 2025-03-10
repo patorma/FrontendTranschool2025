@@ -49,6 +49,19 @@ export class AuthService {
               })
              )
  }
+
+ updateUser(user: User): Observable<User>{
+     return this.http
+                  .put<User>(`${this.URL}/user/${user.id}`,user)
+                  .pipe(
+                    catchError((e)=>{
+                      if(e.error.mensaje){
+                        console.error(e.error.mensaje);
+                        }
+                      return throwError(()=>e);
+                    })
+                  )
+ }
   login(user:User):Observable<any>{
     return this.http.post(`${this.URL}/login`, user).pipe(
       catchError(this.handleError)
@@ -76,6 +89,21 @@ export class AuthService {
 
   getUserData(): Observable<any> {
     return this.http.get(`${this.URL}/me`);
+  }
+
+  getUserById(id: number): Observable<User>{
+    return this.http
+                  .get<User>(`${this.URL}/userId/${id}`)
+                  .pipe(
+                    catchError((e) => {
+                      if(e.status != 401 && e.error.mensaje){
+                          /*capturamos el error y redirigimos a gastos*/
+                       this.router.navigate(['/usuarios'])
+                        console.error(e.error.mensaje);
+                      }
+                      return throwError(()=>e);
+                    })
+                  )
   }
   logout(): void {
     localStorage.removeItem('token');
@@ -160,8 +188,8 @@ export class AuthService {
 
   }
 
-  getUsers():Observable<any>{
-    return this.http.get(`${this.URL}/users`).pipe(
+  getUsers(page: number):Observable<any>{
+    return this.http.get(`${this.URL}/users?page=${page}`).pipe(
       catchError((e) => {
         if(e.status != 401 && e.error.mensa){
             /*capturamos el error y redirigimos a gastos*/

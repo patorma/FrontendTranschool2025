@@ -6,6 +6,7 @@ import { ListarUsuariosComponent } from "./component/listar-usuarios/listar-usua
 import { FormUserComponent } from "./component/form-user/form-user.component";
 import { roles } from './interface/user';
 import { RoleGuard } from "../auth/role.guard";
+import { CrearUsuarioComponent } from "./component/crear-usuario/crear-usuario.component";
 
 
 
@@ -20,8 +21,9 @@ const routes: Routes =[
   },
   {
     path: 'formuser',
-    component:FormUserComponent,
-    canActivate:[AuthGuard]
+    component:CrearUsuarioComponent,
+    canActivate:[AuthGuard,RoleGuard],
+    data: {role: 'admin'}
   },
   {
     path: 'formuser/:id',

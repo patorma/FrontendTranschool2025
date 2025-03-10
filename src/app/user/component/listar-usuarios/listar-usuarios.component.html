@@ -20,6 +20,7 @@
                 <th>Comuna</th>
                 <th>Role</th>
                 <th>Email</th>
+                <th>Telefono</th>
                 <th *ngIf="authService.hasRole('admin')">
                     Editar
                 </th>
@@ -36,8 +37,9 @@
                 <td>{{user.comuna}}</td>
                 <td>{{user.role}}</td>
                 <td>{{user.email}}</td>
+                <td>{{user.telefono}}</td>
                 <td *ngIf="authService.hasRole('admin')">
-                  <button type="button" name="editar" [routerLink]="['/usuarios/form', user.id]" class="btn btn-primary">
+                  <button type="button" name="editar" [routerLink]="['/usuarios/formuser', user.id]" class="btn btn-primary">
                     editar
                   </button>
                 </td>
@@ -50,6 +52,13 @@
           </tbody>
         </table>
      </div>
-
+     <paginador-usuarios
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChanged)="changePage($event)"
+    ></paginador-usuarios>
     </div>
+
+
+
 </div>

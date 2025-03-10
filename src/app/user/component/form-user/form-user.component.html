@@ -1,1 +1,131 @@
-<p>form-user works!</p>
+<ul class="alert alert-danger" *ngIf="errores.length > 0">
+  <li *ngFor="let err of errores">
+      {{ err }}
+  </li>
+</ul>
+
+<div class="card my-4 bg-dark text-white">
+  <div class="card-header">{{ titulo }}</div>
+  <div class="card-body">
+    <form #userForm="ngForm">
+      <div class="form-group row">
+        <label for="name" class="col-form-label col-sm-2">Nombre</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="user.name" name="name" #name="ngModel">
+          <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">
+            <div *ngIf="name.errors?.['required']">
+              Nombre es requerido
+          </div>
+          <div *ngIf="name.errors?.['minlength']">
+            Nombre debe tener 4 caracteres como minimo
+        </div>
+        <div *ngIf="name.errors?.['maxlength']">
+          Nombre debe tener 300 caracteres como máximo
+        </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="last_name" class="col-form-label col-sm-2">Apellido</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="user.last_name" name="last_name" #last_name="ngModel">
+          <div class="alert alert-danger" *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)">
+              <div *ngIf="last_name.errors?.['required']">
+                El apellido es requerido
+              </div>
+          </div>
+          <div *ngIf="last_name.errors?.['minlength']">
+            Apellido debe tener 4 caracteres como minimo
+        </div>
+        <div *ngIf="last_name.errors?.['maxlength']">
+          Apellido debe tener 300 caracteres como máximo
+        </div>
+
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="role" class="col-form-label col-sm-2 father">Rol de Usuario</label>
+        <div class="col-sm-6">
+           <select name="role" id=""  [(ngModel)]="user.role" class="form-control children" style="width: 440px;">
+              <option *ngFor="let role of roles"  [ngValue]="role">{{role}}</option>
+           </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="comuna" class="col-form-label col-sm-2">Comuna</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="user.comuna" name="comuna" #comuna="ngModel">
+          <div class="alert alert-danger" *ngIf="comuna.invalid && (comuna.dirty || comuna.touched)">
+            <div *ngIf="comuna.errors?.['required']">
+             La comuna es requerida
+            </div>
+          </div>
+          <div *ngIf="comuna.errors?.['minlength']">
+            La comuna debe tener 4 caracteres como minimo
+        </div>
+        <div *ngIf="comuna.errors?.['maxlength']">
+          La comuna debe tener 20 caracteres como máximo
+        </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="telefono" class="col-form-label col-sm-2">Telefono</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="user.telefono" name="telefono" #telefono="ngModel">
+          <div class="alert alert-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
+            <div *ngIf="telefono.errors?.['required']">
+             El télefono es requerido
+            </div>
+          </div>
+          <div *ngIf="telefono.errors?.['minlength']">
+            El télefono debe tener 6 caracteres como minimo
+        </div>
+        <div *ngIf="telefono.errors?.['maxlength']">
+          El télefono debe tener 30 caracteres como máximo
+        </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email" class="col-form-label col-sm-2">Email</label>
+        <div class="col-sm-6">
+          <input type="email" class="form-control" [(ngModel)]="user.email" name="email" #email="ngModel" autocomplete="off">
+          <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div *ngIf="email.errors?.['required']">
+              El email es requerido
+             </div>
+          </div>
+            <div *ngIf="email.errors?.['minlength']">
+                 El email debe tener 10 caracteres como minimo
+            </div>
+            <div *ngIf="email.errors?.['maxlength']">
+              El email debe tener 90 caracteres como máximo
+            </div>
+        </div>
+      </div>
+      <!-- <div class="form-group row">
+        <label for="password" class="col-form-label col-sm-2">Password</label>
+        <div class="col-sm-6">
+          <input type="password" class="form-control" [(ngModel)]="user.password" name="password" #password="ngModel">
+          <div class="alert alert-danger" *ngIf="password.invalid && (password.dirty || password.touched)">
+            <div *ngIf="password.errors?.['required']">
+              El password es requerido
+             </div>
+          </div>
+          <div *ngIf="password.errors?.['minlength']">
+            El password debe tener 10 caracteres como minimo
+        </div>
+        </div>
+      </div> -->
+      <div class="col-sm-6">
+        <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!user.id; else elseBlock" [disabled]="!userForm.form.valid">
+          Crear
+        </button>
+        <ng-template #elseBlock>
+          <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!userForm.form.valid">
+            Editar
+          </button>
+        </ng-template>
+       </div>
+    </form>
+  </div>
+</div>
