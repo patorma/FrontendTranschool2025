@@ -76,7 +76,7 @@ export class ListarUsuariosComponent implements OnInit {
                 this.users = this.users.filter((u)=> u !== user);
                 this.router.navigate(['/usuarios/listar-usuarios']);
                 swalWithBootstrapButtons.fire(
-                  'Uusuario Eliminado!',
+                  'Usuario Eliminado!',
                   `Usuario de nombre ${user.name} ${user.last_name} eliminado con éxito.`,
                   'success'
                 );

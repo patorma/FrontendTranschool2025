@@ -27,7 +27,9 @@ const routes: Routes =[
   },
   {
     path: 'formuser/:id',
-    component: FormUserComponent
+    component: FormUserComponent,
+    canActivate:[AuthGuard,RoleGuard],
+    data:{role:'admin'}
   },
   {
     path:'',
