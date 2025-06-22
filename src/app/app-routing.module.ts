@@ -4,6 +4,11 @@ import { PagoModule } from './pages/pago/pago.module';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 const routes: Routes = [
+   {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
     {
     path:'home',
     loadChildren: () =>import('./shared/shared.module').then(m =>m.SharedModule),
