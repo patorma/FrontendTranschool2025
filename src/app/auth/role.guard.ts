@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from "@angular/router";
 import { AuthService } from "./services/auth.service";
 import Swal from "sweetalert2";
+import { User } from '../shared/interface/user';
 
 
 
@@ -9,9 +10,11 @@ import Swal from "sweetalert2";
   providedIn: 'root'
 })
 export class RoleGuard implements CanActivate {
+  user!: User;
   constructor(private authService: AuthService,private router: Router){}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+
     console.log(this.authService.isAuthenticated());
     if(!this.authService.isAuthenticated()){
       this.router.navigate(['/login']);
@@ -25,11 +28,24 @@ export class RoleGuard implements CanActivate {
 
       return true;
     }
+      this.getUsuario();
 
-    Swal.fire('Acceso denegado',`Hola, ${this.authService.user.name}
-      ${this.authService.user.last_name} no tienes acceso a este recurso!`,'warning');
       this.router.navigate(['/usuarios']);
       return false;
+  }
+
+  public getUsuario(): void{
+    this.authService.getUser().subscribe(response => {
+      const {data} = response
+      console.log('Usuario recibido desde API:', data);
+
+      // Asegurarse de acceder correctamente a los datos
+      if (data) {
+        this.user = data;
+        const {name,last_name,role} = data
+        Swal.fire('Acceso denegado',`Hola, ${name} ${last_name} de rol ${role}  no tienes acceso a este recurso!`,'warning');
+      }
+    });
   }
 
 }

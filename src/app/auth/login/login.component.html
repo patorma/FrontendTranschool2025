@@ -3,16 +3,16 @@
     <div class="card-header h">{{titulo}}</div>
     <div class="card-body">
       <form method="POST" class="form">
-        <div class="form-group  mb-3">
+        <div class="mb-3">
           <label for="email" class="col-form-label col-sm-2">Email:</label>
           <input type="email" [(ngModel)]="usuario.email" name="email" class="form-control form-control-lg" placeholder="email" required />
         </div>
-        <div class="form-group mb-3">
+        <div class="mb-3">
           <label for="password" class="col-form-label col-sm-2">Contraseña:</label>
-          <input type="password" [(ngModel)]="usuario.password" name="password"  class="form-control form-control-lg"  required />
+          <input type="password" [(ngModel)]="usuario.password" name="password"  class="form-control form-control-lg" placeholder="password" required />
         </div>
-        <div class="form-group col-sm-6">
-          <input type="submit" (click)="onLogin()" class="btn btn-lg btn-primary btn-block" value="Login">
+        <div class="col-sm-6 d-grid gap-2 mx-auto">
+          <button type="submit" (click)="onLogin()" class="btn btn-lg btn-primary">Login</button>
         </div>
       </form>
     </div>

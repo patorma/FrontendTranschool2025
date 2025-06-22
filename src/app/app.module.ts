@@ -7,12 +7,16 @@ import { HTTP_INTERCEPTORS, HttpBackend, HttpClientModule } from '@angular/commo
 import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
+import { UserModule } from './user/user.module';
+
+
 
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+
 
   ],
   imports: [
@@ -21,6 +25,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     AuthModule,
     SharedModule,
+    UserModule
 ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

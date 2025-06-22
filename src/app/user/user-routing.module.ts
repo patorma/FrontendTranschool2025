@@ -1,12 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { WelcomeComponent } from "./component/welcome/welcome.component";
+import { WelcomeComponent } from "./components/welcome/welcome.component";
 import { AuthGuard } from "../auth/auth.guard";
-import { ListarUsuariosComponent } from "./component/listar-usuarios/listar-usuarios.component";
-import { FormUserComponent } from "./component/form-user/form-user.component";
-import { roles } from './interface/user';
+import { ListarUsuariosComponent } from "./components/listar-usuarios/listar-usuarios.component";
+import { FormUserComponent } from "./components/form-user/form-user.component";
+import { roles } from '../shared/interface/user';
 import { RoleGuard } from "../auth/role.guard";
-import { CrearUsuarioComponent } from "./component/crear-usuario/crear-usuario.component";
+import { CrearUsuarioComponent } from "./components/crear-usuario/crear-usuario.component";
 
 
 
@@ -32,7 +32,7 @@ const routes: Routes =[
     data:{role:'admin'}
   },
   {
-    path:'',
+    path:'welcome',
     component: WelcomeComponent,
      canActivate:[AuthGuard]
    }

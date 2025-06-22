@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { User } from '../../interface/user';
+import { User } from '../../../shared/interface/user';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';

@@ -9,4 +9,4 @@ export interface User {
   password:  string;
 }
 
-export type roles = 'admin' |'apoderado' |'transportista';
+export type roles = 'admin' |'apoderado' |'transportista' | '';

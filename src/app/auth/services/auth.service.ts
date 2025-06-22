@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { roles, User } from '../../user/interface/user';
+import { roles, User } from '../../shared/interface/user';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { URL_SERVICIOS } from '../../config/config';
@@ -17,7 +17,7 @@ export class AuthService {
         name: '',
         last_name: '',
         comuna: '',
-        role: 'apoderado' ,// Asigna un valor válido para el tipo `roles`
+        role: '' ,// Asigna un valor válido para el tipo `roles`
         telefono: '',
         email: '',
         password: ''
@@ -64,6 +64,7 @@ export class AuthService {
  }
   login(user:User):Observable<any>{
     return this.http.post(`${this.URL}/login`, user).pipe(
+
       catchError(this.handleError)
     );
   }
@@ -192,10 +193,12 @@ export class AuthService {
   getUsers(page: number):Observable<any>{
     return this.http.get(`${this.URL}/users?page=${page}`).pipe(
       catchError((e) => {
-        if(e.status != 401 && e.error.mensa){
+        if(e.status != 401 && e.error.message){
+          console.log('desde getusers')
             /*capturamos el error y redirigimos a gastos*/
-         this.router.navigate(['login'])
+         this.router.navigate(['/login'])
           console.error(e.error.error);
+          console.error(e.error.message);
         }
         return throwError(()=>e);
       })

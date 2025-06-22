@@ -1,24 +1,25 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
-import { User } from '../../user/interface/user';
+import { User } from '../../shared/interface/user';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: false,
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrl:'./login.component.css'
 })
 export class LoginComponent {
 
   errors: string[] = [];
-  titulo: string = 'Iniciar Sesión'
+  titulo: string = 'Iniciar Sesión';
   usuario:  User = {
     id: 0,
         name: '',
         last_name: '',
         comuna: '',
-        role: 'apoderado', // Asigna un valor válido para el tipo `roles`
+        role: '', // Asigna un valor válido para el tipo `roles`
         telefono: '',
         email: '',
         password: ''
@@ -34,7 +35,7 @@ export class LoginComponent {
     }
     this.authService.login(this.usuario).subscribe({
       next: (res) => {
-        console.log(role)
+        console.log(res)
         this.authService.setToken(res.token);
 
         // Obtener datos del usuario desde API /me
@@ -45,7 +46,7 @@ export class LoginComponent {
             title: 'Bienvenido',
             text: 'Inicio de sesión exitoso'
           });
-          this.router.navigate(['/welcome']);
+          this.router.navigate(['/usuarios/welcome']);
         });
       },
       error: (err:any) => {
