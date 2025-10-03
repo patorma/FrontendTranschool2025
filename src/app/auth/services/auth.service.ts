@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private URL=  `${URL_SERVICIOS}`;
+  private token!: any ;
   private _token!: string;
   public user: User = {
     id: 0,
@@ -91,6 +92,10 @@ export class AuthService {
   getUserData(): Observable<any> {
     return this.http.get(`${this.URL}/me`);
   }
+
+  // logout2(token:any):Observable<any>{
+  //   return this.http.post<any>(`${this.URL}/logout`,token)
+  // }
 
   getUserById(id: number): Observable<User>{
     return this.http
