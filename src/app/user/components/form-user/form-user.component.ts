@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { User } from '../../../shared/interface/user';
+import { roles, User } from '../../../shared/interface/user';
 import { AuthService } from '../../../auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -24,8 +24,9 @@ export class FormUserComponent implements OnInit {
 
   public titulo: string = 'Crear usuario';
   public errores:any ={};
+  public passwordConfirmation: string = '';
 
-  roles: string [] =['admin','transportista','apoderado']
+roles: roles[] = ['admin', 'apoderado', 'transportista'];
 
   constructor(private authService: AuthService,private router: Router,
     private activatedRoute:ActivatedRoute,private changeDetectorRef: ChangeDetectorRef
@@ -42,7 +43,8 @@ export class FormUserComponent implements OnInit {
       if (id) {
         this.authService.getUserById(id).subscribe({
           next: ({ data }: any) => {
-            this.user = data;
+            this.user = data as User;
+
             console.log(this.user);
             // console.log(this.user.email)
             // setTimeout(() => {
@@ -60,30 +62,35 @@ export class FormUserComponent implements OnInit {
   }
 
   create(): void{
-    this.authService.registerUser(this.user).subscribe(
-      (user) =>{
-        this.router.navigate(['/usuarios'])
-        Swal.fire(
-          'Nuevo usuario creado!!',
-          `El usuario ${user.name} ${user.last_name} ha sido creado con éxito!!`,
-          'success'
-        )
-      },
-      (err:any) =>{
-        this.errores = err.error.error as string[]
-        console.error("Codigo del error desde el backend: " + err.status);
-        console.error(err.error.error);
-        Swal.fire(
-          'Error',
-          'Ocurrio un error al ingreso del usuario',
-          'error'
-        )
-      }
-    )
+     const payload = {
+    ...this.user,
+    password_confirmation: this.passwordConfirmation
+  };
+    this.authService.registerUser(payload).subscribe(
+  ({ data, message }: any) => {
+    this.router.navigate(['/user/listar-usuarios']);
+    Swal.fire(
+      'Nuevo usuario creado!!',
+      `El usuario ${data.name} ${data.last_name} ha sido creado con éxito!!`,
+      'success'
+    );
+  },
+  (err: any) => {
+    this.errores = err.error.error;
+    Swal.fire(
+      'Error',
+      'Ocurrió un error al ingreso del usuario',
+      'error'
+    );
+  }
+);
   }
 
   update(): void{
-    this.authService.updateUser(this.user).subscribe(
+      const payload = { ...this.user };
+
+  delete payload.password; // seguridad extra
+    this.authService.updateUser(payload).subscribe(
       ({message,data}: any)=>{
         this.router.navigate(['usuarios/listar-usuarios']);
         Swal.fire(

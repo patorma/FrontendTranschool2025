@@ -3,10 +3,11 @@ export interface User {
   name:      string;
   last_name: string;
   comuna:    string;
-  role:      roles;
+  role?:      roles;
   telefono:  string;
   email:     string;
-  password:  string;
+  password?:  string;
 }
 
-export type roles = 'admin' |'apoderado' |'transportista' | '';
+export type roles = 'admin' | 'apoderado' | 'transportista';
+

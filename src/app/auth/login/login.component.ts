@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { User } from '../../shared/interface/user';
 import Swal from 'sweetalert2';
+import { Login } from '../../shared/interface/login';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,8 @@ export class LoginComponent {
 
   errors: string[] = [];
   titulo: string = 'Iniciar Sesión';
-  usuario:  User = {
-    id: 0,
-        name: '',
-        last_name: '',
-        comuna: '',
-        role: '', // Asigna un valor válido para el tipo `roles`
-        telefono: '',
+  usuario:  Login = {
+
         email: '',
         password: ''
   };
@@ -28,7 +24,7 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    const {email,password,role} = this.usuario
+    const {email,password} = this.usuario
     if(email == null || password == null || email === '' || password== ''){
       Swal.fire('Error Login','Username o password vacías!','error');
       return;

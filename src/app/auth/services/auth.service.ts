@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
+import { Login } from '../../shared/interface/login';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
         name: '',
         last_name: '',
         comuna: '',
-        role: '' ,// Asigna un valor válido para el tipo `roles`
+        role: 'apoderado' ,// Asigna un valor válido para el tipo `roles`
         telefono: '',
         email: '',
         password: ''
@@ -63,7 +64,7 @@ export class AuthService {
                     })
                   )
  }
-  login(user:User):Observable<any>{
+  login(user:Login):Observable<any>{
     return this.http.post(`${this.URL}/login`, user).pipe(
 
       catchError(this.handleError)
@@ -137,7 +138,10 @@ export class AuthService {
       console.log("Respuesta del backend:", response);
       const {data} = response
       this.user = data; // Asigna toda la respuesta a this.user
+     if(this.user.role){
       localStorage.setItem('role',this.user.role);
+     }
+
       console.log("Rol del usuario después de la respuesta:", this.user.role);
       return response;
      })
